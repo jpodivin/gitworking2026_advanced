@@ -27,6 +27,25 @@ From a source checkout, run:
 python -m fernpress --version
 ```
 
+## Configuration
+
+Site settings are read from a JSON file, conventionally named `site.json`.
+Relative paths are resolved from the directory containing that file.
+
+```json
+{
+  "title": "Example Notes",
+  "base_url": "https://example.test",
+  "content_dir": "content",
+  "output_dir": "public",
+  "template_dir": "templates",
+  "static_dir": "static",
+  "posts_per_page": 10
+}
+```
+
+All keys are optional. The default output directory is `public`.
+
 ## Project layout
 
 ```text

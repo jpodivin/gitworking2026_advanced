@@ -9,3 +9,4 @@ project follows [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Initial repository scaffold and command-line entry point.
+- JSON-backed site configuration loader with path resolution and basic validation.
