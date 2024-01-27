@@ -11,3 +11,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - Initial repository scaffold and command-line entry point.
 - JSON-backed site configuration loader with path resolution and basic validation.
 - Front matter parser for titles, dates, tags, drafts, and other page metadata.
+- Basic Markdown rendering for headings, paragraphs, and fenced code blocks.
