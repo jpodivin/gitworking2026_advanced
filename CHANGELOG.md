@@ -12,3 +12,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - JSON-backed site configuration loader with path resolution and basic validation.
 - Front matter parser for titles, dates, tags, drafts, and other page metadata.
 - Basic Markdown rendering for headings, paragraphs, and fenced code blocks.
+- Lightweight `{{ key }}` HTML layout rendering.
