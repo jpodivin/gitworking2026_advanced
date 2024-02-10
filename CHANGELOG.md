@@ -13,3 +13,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - Front matter parser for titles, dates, tags, drafts, and other page metadata.
 - Basic Markdown rendering for headings, paragraphs, and fenced code blocks.
 - Lightweight `{{ key }}` HTML layout rendering.
+- Page loading, slug generation, and static HTML output.
