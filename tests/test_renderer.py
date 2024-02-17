@@ -47,6 +47,21 @@ class RendererTests(unittest.TestCase):
         self.assertEqual(pages[0].slug, "hello")
         self.assertIn("<h1>Welcome</h1>", pages[0].body)
 
+    def test_pages_are_sorted_newest_first(self) -> None:
+        self.write_page("old.md", "---\ntitle: Old\ndate: 2023-01-01\n---\n")
+        self.write_page("new.md", "---\ntitle: New\ndate: 2024-04-01\n---\n")
+        self.write_page("undated.md", "---\ntitle: Undated\n---\n")
+
+        pages = load_pages(self.config)
+
+        self.assertEqual([page.title for page in pages], ["New", "Old", "Undated"])
+
+    def test_invalid_date_is_reported(self) -> None:
+        self.write_page("bad.md", "---\ntitle: Bad\ndate: yesterday\n---\n")
+
+        with self.assertRaisesRegex(ValueError, "Invalid date"):
+            load_pages(self.config)
+
     def test_build_writes_pages(self) -> None:
         self.write_page("hello.md", "---\ntitle: Hello\n---\nBody\n")
 

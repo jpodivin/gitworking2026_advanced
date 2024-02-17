@@ -1,6 +1,7 @@
 """Load content and build a static site."""
 
 from dataclasses import dataclass
+from datetime import date as Date
 from pathlib import Path
 from typing import Dict, List
 
@@ -18,9 +19,18 @@ class Page:
     source: Path
     title: str
     slug: str
-    date: str
+    date: Date
     metadata: Dict[str, object]
     body: str
+
+
+def _parse_date(value: object, source: Path) -> Date:
+    if not value:
+        return Date.min
+    try:
+        return Date.fromisoformat(str(value))
+    except ValueError as exc:
+        raise ValueError(f"Invalid date in {source}: {value}") from exc
 
 
 def load_pages(config: SiteConfig) -> List[Page]:
@@ -39,11 +49,12 @@ def load_pages(config: SiteConfig) -> List[Page]:
                 source=source,
                 title=title,
                 slug=slug or "post",
-                date=str(document.metadata.get("date", "")),
+                date=_parse_date(document.metadata.get("date"), source),
                 metadata=document.metadata,
                 body=render_markdown(document.body),
             )
         )
+    pages.sort(key=lambda page: (page.date, page.source.name), reverse=True)
     return pages
 
 
