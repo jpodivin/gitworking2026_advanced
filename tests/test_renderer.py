@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from fernpress.config import load_config
-from fernpress.renderer import build_site, load_pages
+from fernpress.renderer import build_site, copy_static, load_pages
 
 
 class RendererTests(unittest.TestCase):
@@ -70,6 +70,15 @@ class RendererTests(unittest.TestCase):
         destination = self.root / "public" / "hello.html"
         self.assertEqual(written, [destination])
         self.assertIn("<h1>Hello</h1>", destination.read_text(encoding="utf-8"))
+
+    def test_static_files_are_copied(self) -> None:
+        static_file = self.root / "static" / "css" / "site.css"
+        static_file.parent.mkdir()
+        static_file.write_text("body {}", encoding="utf-8")
+
+        copy_static(self.config)
+
+        self.assertTrue((self.root / "public" / "css" / "site.css").is_file())
 
     def test_missing_template_is_reported(self) -> None:
         (self.root / "templates" / "base.html").unlink()

@@ -1,5 +1,6 @@
 """Load content and build a static site."""
 
+import shutil
 from dataclasses import dataclass
 from datetime import date as Date
 from pathlib import Path
@@ -58,6 +59,23 @@ def load_pages(config: SiteConfig) -> List[Page]:
     return pages
 
 
+def copy_static(config: SiteConfig) -> List[Path]:
+    """Copy configured static files into the output directory."""
+
+    if not config.static_dir.exists():
+        return []
+
+    copied = []
+    for source in sorted(config.static_dir.rglob("*")):
+        if not source.is_file():
+            continue
+        destination = config.output_dir / source.relative_to(config.static_dir)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        copied.append(destination)
+    return copied
+
+
 def build_site(config: SiteConfig) -> List[Path]:
     """Render all pages into the configured output directory."""
 
@@ -79,4 +97,5 @@ def build_site(config: SiteConfig) -> List[Path]:
         destination = config.output_dir / f"{page.slug}.html"
         destination.write_text(rendered, encoding="utf-8")
         written.append(destination)
+    written.extend(copy_static(config))
     return written

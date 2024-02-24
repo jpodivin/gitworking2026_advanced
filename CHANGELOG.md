@@ -14,3 +14,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - Basic Markdown rendering for headings, paragraphs, and fenced code blocks.
 - Lightweight `{{ key }}` HTML layout rendering.
 - Page loading, slug generation, and static HTML output.
+- Static asset copying into the generated site.
