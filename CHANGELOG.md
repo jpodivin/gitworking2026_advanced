@@ -15,3 +15,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - Lightweight `{{ key }}` HTML layout rendering.
 - Page loading, slug generation, and static HTML output.
 - Static asset copying into the generated site.
+- `build` command with end-to-end test coverage.
