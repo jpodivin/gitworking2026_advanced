@@ -16,3 +16,4 @@ project follows [Semantic Versioning](https://semver.org/).
 - Page loading, slug generation, and static HTML output.
 - Static asset copying into the generated site.
 - `build` command with end-to-end test coverage.
+- Buildable example site and quick-start documentation.

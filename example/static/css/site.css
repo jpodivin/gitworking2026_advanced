@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 44rem;
+  padding: 2rem 1rem;
+  color: #222;
+  background: #faf9f6;
+}
+
+a {
+  color: #276749;
+}
+
+.site-header,
+.site-footer {
+  border-color: #d8d4ca;
+  border-style: solid;
+  padding: 0.75rem 0;
+}
+
+.site-header {
+  border-width: 0 0 1px;
+}
+
+.site-footer {
+  border-width: 1px 0 0;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  background: #eeeae2;
+}

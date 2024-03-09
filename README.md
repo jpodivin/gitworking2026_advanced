@@ -4,9 +4,8 @@ Fernpress is a small static-site renderer written in Python using only the
 standard library. It turns Markdown files with simple front matter into a
 directory of HTML pages that can be hosted anywhere.
 
-The project is at an early stage. This repository currently contains the
-project skeleton and command-line entry point. Content loading and rendering
-will follow in later commits.
+The project is under active development. The current release supports
+Markdown pages, front matter, layout templates, and static assets.
 
 ## Goals
 
@@ -19,9 +18,18 @@ will follow in later commits.
 
 - Python 3.9 or newer
 
-## Usage
+## Quick start
 
-From a source checkout, run:
+From a source checkout, build the example site:
+
+```sh
+python -m fernpress build --config example/site.json
+```
+
+The generated files are written to `example/public/`. Open
+`example/public/index.html` in a browser to inspect the result.
+
+Check the installed checkout version with:
 
 ```sh
 python -m fernpress --version
@@ -51,6 +59,7 @@ All keys are optional. The default output directory is `public`.
 ```text
 fernpress/   Python package
 tests/       Automated tests
+example/     Small buildable example site
 ```
 
 ## Development

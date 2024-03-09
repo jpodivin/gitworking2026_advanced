@@ -1,0 +1,9 @@
+{
+  "title": "Fernpress Example",
+  "base_url": "https://example.test",
+  "content_dir": "content",
+  "output_dir": "public",
+  "template_dir": "templates",
+  "static_dir": "static",
+  "posts_per_page": 5
+}
