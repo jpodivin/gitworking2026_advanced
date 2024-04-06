@@ -21,6 +21,7 @@ class Page:
     title: str
     slug: str
     date: Date
+    tags: List[str]
     metadata: Dict[str, object]
     body: str
 
@@ -45,12 +46,20 @@ def load_pages(config: SiteConfig) -> List[Page]:
         title = str(document.metadata.get("title") or source.stem.replace("-", " ").title())
         explicit_slug = document.metadata.get("slug")
         slug = str(explicit_slug) if explicit_slug else slugify(title)
+        raw_tags = document.metadata.get("tags", [])
+        if isinstance(raw_tags, list):
+            tags = [str(tag) for tag in raw_tags if str(tag)]
+        elif raw_tags:
+            tags = [tag.strip() for tag in str(raw_tags).split(",") if tag.strip()]
+        else:
+            tags = []
         pages.append(
             Page(
                 source=source,
                 title=title,
                 slug=slug or "post",
                 date=_parse_date(document.metadata.get("date"), source),
+                tags=tags,
                 metadata=document.metadata,
                 body=render_markdown(document.body),
             )

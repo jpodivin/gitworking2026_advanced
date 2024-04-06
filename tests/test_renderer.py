@@ -47,6 +47,16 @@ class RendererTests(unittest.TestCase):
         self.assertEqual(pages[0].slug, "hello")
         self.assertIn("<h1>Welcome</h1>", pages[0].body)
 
+    def test_page_tags_are_loaded(self) -> None:
+        self.write_page(
+            "tagged.md",
+            "---\ntitle: Tagged\ntags: [notes, Python]\n---\nBody\n",
+        )
+
+        pages = load_pages(self.config)
+
+        self.assertEqual(pages[0].tags, ["notes", "Python"])
+
     def test_pages_are_sorted_newest_first(self) -> None:
         self.write_page("old.md", "---\ntitle: Old\ndate: 2023-01-01\n---\n")
         self.write_page("new.md", "---\ntitle: New\ndate: 2024-04-01\n---\n")

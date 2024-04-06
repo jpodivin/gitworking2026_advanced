@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Tag metadata on content pages.
+
 ## [1.0.0] - 2024-03-23
 
 ### Added
