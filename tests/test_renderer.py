@@ -81,6 +81,18 @@ class RendererTests(unittest.TestCase):
         self.assertEqual(written, [destination])
         self.assertIn("<h1>Hello</h1>", destination.read_text(encoding="utf-8"))
 
+    def test_tag_pages_are_generated(self) -> None:
+        self.write_page(
+            "tagged.md",
+            "---\ntitle: Tagged\ntags: [notes]\n---\nBody\n",
+        )
+
+        build_site(self.config)
+
+        tag_page = self.root / "public" / "tags" / "notes.html"
+        self.assertTrue(tag_page.is_file())
+        self.assertIn("Tagged: notes", tag_page.read_text(encoding="utf-8"))
+
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"
         static_file.parent.mkdir()
