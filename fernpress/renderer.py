@@ -38,6 +38,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
     """Load every Markdown file below the configured content directory."""
 
     pages = []
+    seen_slugs = {}
     for source in sorted(config.content_dir.rglob("*.md")):
         document = parse_front_matter(
             source.read_text(encoding="utf-8"), source=str(source)
@@ -45,11 +46,17 @@ def load_pages(config: SiteConfig) -> List[Page]:
         title = str(document.metadata.get("title") or source.stem.replace("-", " ").title())
         explicit_slug = document.metadata.get("slug")
         slug = str(explicit_slug) if explicit_slug else slugify(title)
+        slug = slug or "post"
+        if slug in seen_slugs:
+            raise ValueError(
+                f"Duplicate output slug '{slug}' in {seen_slugs[slug]} and {source}"
+            )
+        seen_slugs[slug] = source
         pages.append(
             Page(
                 source=source,
                 title=title,
-                slug=slug or "post",
+                slug=slug,
                 date=_parse_date(document.metadata.get("date"), source),
                 metadata=document.metadata,
                 body=render_markdown(document.body),
