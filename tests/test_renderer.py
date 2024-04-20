@@ -56,6 +56,13 @@ class RendererTests(unittest.TestCase):
 
         self.assertEqual([page.title for page in pages], ["New", "Old", "Undated"])
 
+    def test_duplicate_slugs_are_rejected(self) -> None:
+        self.write_page("first.md", "---\ntitle: Same\n---\n")
+        self.write_page("second.md", "---\ntitle: Same\n---\n")
+
+        with self.assertRaisesRegex(ValueError, "Duplicate output slug"):
+            load_pages(self.config)
+
     def test_invalid_date_is_reported(self) -> None:
         self.write_page("bad.md", "---\ntitle: Bad\ndate: yesterday\n---\n")
 
