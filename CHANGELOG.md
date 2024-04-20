@@ -6,6 +6,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Tag metadata on content pages.
+- Tag index pages for browsing related posts.
+
 ## [1.0.0] - 2024-03-23
 
 ### Added

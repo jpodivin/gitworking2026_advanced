@@ -47,6 +47,16 @@ class RendererTests(unittest.TestCase):
         self.assertEqual(pages[0].slug, "hello")
         self.assertIn("<h1>Welcome</h1>", pages[0].body)
 
+    def test_page_tags_are_loaded(self) -> None:
+        self.write_page(
+            "tagged.md",
+            "---\ntitle: Tagged\ntags: [notes, Python]\n---\nBody\n",
+        )
+
+        pages = load_pages(self.config)
+
+        self.assertEqual(pages[0].tags, ["notes", "Python"])
+
     def test_pages_are_sorted_newest_first(self) -> None:
         self.write_page("old.md", "---\ntitle: Old\ndate: 2023-01-01\n---\n")
         self.write_page("new.md", "---\ntitle: New\ndate: 2024-04-01\n---\n")
@@ -70,6 +80,18 @@ class RendererTests(unittest.TestCase):
         destination = self.root / "public" / "hello.html"
         self.assertEqual(written, [destination])
         self.assertIn("<h1>Hello</h1>", destination.read_text(encoding="utf-8"))
+
+    def test_tag_pages_are_generated(self) -> None:
+        self.write_page(
+            "tagged.md",
+            "---\ntitle: Tagged\ntags: [notes]\n---\nBody\n",
+        )
+
+        build_site(self.config)
+
+        tag_page = self.root / "public" / "tags" / "notes.html"
+        self.assertTrue(tag_page.is_file())
+        self.assertIn("Tagged: notes", tag_page.read_text(encoding="utf-8"))
 
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"
