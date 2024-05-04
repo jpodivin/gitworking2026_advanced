@@ -10,6 +10,7 @@ from typing import Dict, List
 from fernpress.config import SiteConfig
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
+from fernpress.pagination import paginate
 from fernpress.slug import slugify
 from fernpress.tagging import group_by_tag, tag_slug
 from fernpress.templates import render_template
@@ -91,6 +92,38 @@ def _page_context(title: str, content: str) -> Dict[str, str]:
     return {"title": title, "content": content, "year": "2024"}
 
 
+def render_index_pages(
+    config: SiteConfig, template: str, pages: List[Page]
+) -> List[Path]:
+    """Render the paginated home page."""
+
+    chunks = paginate(pages, config.posts_per_page) or [[]]
+    written = []
+    for number, chunk in enumerate(chunks, start=1):
+        items = "".join(
+            f'<li><a href="/{page.slug}.html">{html.escape(page.title)}</a></li>'
+            for page in chunk
+        )
+        navigation = []
+        if number > 1:
+            previous = "index.html" if number == 2 else f"page/{number - 1}.html"
+            navigation.append(f'<a href="/{previous}">Previous</a>')
+        if number < len(chunks):
+            navigation.append(f'<a href="/page/{number + 1}.html">Next</a>')
+        content = f"<ul>{items}</ul>{''.join(navigation)}"
+        title = "Home" if number == 1 else f"Home - page {number}"
+        if number == 1:
+            destination = config.output_dir / "index.html"
+        else:
+            destination = config.output_dir / "page" / f"{number}.html"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(
+            render_template(template, _page_context(title, content)), encoding="utf-8"
+        )
+        written.append(destination)
+    return written
+
+
 def render_tag_pages(config: SiteConfig, template: str, pages: List[Page]) -> List[Path]:
     """Render one index page for each tag."""
 
@@ -130,6 +163,7 @@ def build_site(config: SiteConfig) -> List[Path]:
         destination = config.output_dir / f"{page.slug}.html"
         destination.write_text(rendered, encoding="utf-8")
         written.append(destination)
+    written.extend(render_index_pages(config, template, pages))
     written.extend(render_tag_pages(config, template, pages))
     written.extend(copy_static(config))
     return written

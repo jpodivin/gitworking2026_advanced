@@ -37,8 +37,9 @@ class CliTests(unittest.TestCase):
                 result = main(["build", "--config", str(config_path)])
 
             self.assertEqual(result, 0)
-            self.assertIn("Built 1 file", output.getvalue())
+            self.assertIn("Built", output.getvalue())
             self.assertTrue((root / "public" / "hello.html").is_file())
+            self.assertTrue((root / "public" / "index.html").is_file())
 
 
 if __name__ == "__main__":

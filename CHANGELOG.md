@@ -10,6 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Tag metadata on content pages.
 - Tag index pages for browsing related posts.
+- Paginated home index for larger content collections.
 
 ## [1.0.0] - 2024-03-23
 

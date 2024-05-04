@@ -3,6 +3,7 @@
 import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 from fernpress.config import load_config
@@ -78,7 +79,8 @@ class RendererTests(unittest.TestCase):
         written = build_site(self.config)
 
         destination = self.root / "public" / "hello.html"
-        self.assertEqual(written, [destination])
+        self.assertIn(destination, written)
+        self.assertTrue((self.root / "public" / "index.html").is_file())
         self.assertIn("<h1>Hello</h1>", destination.read_text(encoding="utf-8"))
 
     def test_tag_pages_are_generated(self) -> None:
@@ -92,6 +94,20 @@ class RendererTests(unittest.TestCase):
         tag_page = self.root / "public" / "tags" / "notes.html"
         self.assertTrue(tag_page.is_file())
         self.assertIn("Tagged: notes", tag_page.read_text(encoding="utf-8"))
+
+    def test_index_pages_are_paginated(self) -> None:
+        self.write_page("one.md", "---\ntitle: One\ndate: 2024-01-03\n---\n")
+        self.write_page("two.md", "---\ntitle: Two\ndate: 2024-01-02\n---\n")
+        self.write_page("three.md", "---\ntitle: Three\ndate: 2024-01-01\n---\n")
+        config = replace(self.config, posts_per_page=2)
+
+        build_site(config)
+
+        first = self.root / "public" / "index.html"
+        second = self.root / "public" / "page" / "2.html"
+        self.assertTrue(first.is_file())
+        self.assertTrue(second.is_file())
+        self.assertIn("Next", first.read_text(encoding="utf-8"))
 
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"
