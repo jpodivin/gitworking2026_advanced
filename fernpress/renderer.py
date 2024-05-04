@@ -9,6 +9,7 @@ from typing import Dict, List
 from fernpress.config import SiteConfig
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
+from fernpress.paths import safe_join
 from fernpress.slug import slugify
 from fernpress.templates import render_template
 
@@ -76,7 +77,9 @@ def copy_static(config: SiteConfig) -> List[Path]:
     for source in sorted(config.static_dir.rglob("*")):
         if not source.is_file():
             continue
-        destination = config.output_dir / source.relative_to(config.static_dir)
+        destination = safe_join(
+            config.output_dir, str(source.relative_to(config.static_dir))
+        )
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
         copied.append(destination)
@@ -101,7 +104,8 @@ def build_site(config: SiteConfig) -> List[Path]:
             "year": "2024",
         }
         rendered = render_template(template, context)
-        destination = config.output_dir / f"{page.slug}.html"
+        destination = safe_join(config.output_dir, f"{page.slug}.html")
+        destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(rendered, encoding="utf-8")
         written.append(destination)
     written.extend(copy_static(config))
