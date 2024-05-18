@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from fernpress.config import SiteConfig
+from fernpress.feeds import write_feed
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
 from fernpress.pagination import paginate
@@ -165,5 +166,6 @@ def build_site(config: SiteConfig) -> List[Path]:
         written.append(destination)
     written.extend(render_index_pages(config, template, pages))
     written.extend(render_tag_pages(config, template, pages))
+    written.append(write_feed(config, pages))
     written.extend(copy_static(config))
     return written
