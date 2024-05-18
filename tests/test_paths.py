@@ -21,6 +21,11 @@ class PathTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "escapes output"):
                 safe_join(Path(tempdir), "..", "outside.html")
 
+    def test_windows_style_parent_segments_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as tempdir:
+            with self.assertRaisesRegex(ValueError, "escapes output"):
+                safe_join(Path(tempdir), "..\\outside.html")
+
 
 if __name__ == "__main__":
     unittest.main()
