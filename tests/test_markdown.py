@@ -24,6 +24,19 @@ class MarkdownTests(unittest.TestCase):
         self.assertIn('<code class="language-python">', rendered)
         self.assertIn("print(&#x27;&lt;ok&gt;&#x27;)", rendered)
 
+    def test_inline_links_and_emphasis(self) -> None:
+        rendered = render_markdown(
+            "Read [the docs](https://example.test/docs) for _more_ and **new** details.\n"
+        )
+
+        self.assertIn('<a href="https://example.test/docs">the docs</a>', rendered)
+        self.assertIn("<em>more</em>", rendered)
+        self.assertIn("<strong>new</strong>", rendered)
+
+    def test_inline_code_is_rendered(self) -> None:
+        rendered = render_markdown("Run `fernpress build`.\n")
+        self.assertIn("<code>fernpress build</code>", rendered)
+
     def test_empty_input_produces_empty_output(self) -> None:
         self.assertEqual(render_markdown(""), "")
 

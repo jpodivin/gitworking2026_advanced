@@ -7,16 +7,25 @@ _HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
 _FENCE = re.compile(r"^```([A-Za-z0-9_+-]*)\s*$")
 
 
+def _inline(text: str) -> str:
+    value = html.escape(text, quote=False)
+    value = re.sub(r"_([^_]+)_", r"<em>\1</em>", value)
+    value = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", value)
+    value = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", value)
+    value = re.sub(r"`([^`]+)`", r"<code>\1</code>", value)
+    value = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', value)
+    return value
+
+
 def _paragraph(lines: list) -> str:
     text = " ".join(line.strip() for line in lines)
-    return f"<p>{html.escape(text)}</p>"
+    return f"<p>{_inline(text)}</p>"
 
 
 def render_markdown(text: str) -> str:
-    """Render headings, paragraphs, and fenced code blocks as HTML.
+    """Render headings, paragraphs, inline spans, and fenced code as HTML.
 
-    Raw HTML is escaped. More inline syntax is intentionally left for a later
-    release so the initial renderer stays small and predictable.
+    Raw HTML is escaped before the small inline syntax is applied.
     """
 
     lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
@@ -47,7 +56,7 @@ def render_markdown(text: str) -> str:
         heading = _HEADING.match(line)
         if heading:
             level = len(heading.group(1))
-            output.append(f"<h{level}>{html.escape(heading.group(2))}</h{level}>")
+            output.append(f"<h{level}>{_inline(heading.group(2))}</h{level}>")
             index += 1
             continue
 
