@@ -2,6 +2,8 @@
 
 import argparse
 import sys
+from dataclasses import replace
+from pathlib import Path
 from typing import Optional, Sequence
 
 from fernpress import __version__
@@ -20,6 +22,10 @@ def build_parser() -> argparse.ArgumentParser:
         default="site.json",
         help="path to the site configuration file (default: site.json)",
     )
+    build.add_argument(
+        "--output",
+        help="override the configured output directory",
+    )
     build.add_argument("--verbose", action="store_true", help="print generated paths")
     return parser
 
@@ -34,6 +40,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         config = load_config(args.config)
+        if args.output:
+            config = replace(
+                config, output_dir=Path(args.output).expanduser().resolve()
+            )
         written = build_site(config)
     except (ConfigError, OSError, RuntimeError, ValueError) as exc:
         print(f"fernpress: {exc}", file=sys.stderr)
