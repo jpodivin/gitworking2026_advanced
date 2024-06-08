@@ -16,6 +16,7 @@ DEFAULTS: Dict[str, Any] = {
 }
 
 PATH_FIELDS = ("content_dir", "output_dir", "template_dir", "static_dir")
+KNOWN_KEYS = frozenset(DEFAULTS)
 
 
 class ConfigError(ValueError):
@@ -75,6 +76,9 @@ def load_config(path: Union[str, Path]) -> SiteConfig:
 
     config_path = Path(path)
     raw = _read_json(config_path)
+    unknown = sorted(set(raw) - KNOWN_KEYS)
+    if unknown:
+        raise ConfigError(f"Unknown configuration key(s): {', '.join(unknown)}")
     values = {**DEFAULTS, **raw}
     root = config_path.resolve().parent
 

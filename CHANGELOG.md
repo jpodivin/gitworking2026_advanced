@@ -13,6 +13,7 @@ project follows [Semantic Versioning](https://semver.org/).
 - Paginated home index for larger content collections.
 - RSS 2.0 feed generation.
 - Inline links, emphasis, and code spans in Markdown content.
+- Configuration key validation with helpful misspelling errors.
 
 ## [1.0.0] - 2024-03-23
 
