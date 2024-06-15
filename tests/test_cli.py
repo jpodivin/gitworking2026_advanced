@@ -19,6 +19,35 @@ class CliTests(unittest.TestCase):
         self.assertEqual(raised.exception.code, 0)
         self.assertIn("fernpress", output.getvalue())
 
+    def test_output_override(self) -> None:
+        with tempfile.TemporaryDirectory() as tempdir:
+            root = Path(tempdir)
+            (root / "content").mkdir()
+            (root / "templates").mkdir()
+            (root / "content" / "hello.md").write_text(
+                "---\ntitle: Hello\n---\nText\n", encoding="utf-8"
+            )
+            (root / "templates" / "base.html").write_text(
+                "{{ content }}", encoding="utf-8"
+            )
+            config_path = root / "site.json"
+            config_path.write_text(json.dumps({}), encoding="utf-8")
+            output = root / "custom-output"
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = main(
+                    [
+                        "build",
+                        "--config",
+                        str(config_path),
+                        "--output",
+                        str(output),
+                    ]
+                )
+
+            self.assertEqual(result, 0)
+            self.assertTrue((output / "hello.html").is_file())
+
     def test_build_command(self) -> None:
         with tempfile.TemporaryDirectory() as tempdir:
             root = Path(tempdir)
