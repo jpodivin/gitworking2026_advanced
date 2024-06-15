@@ -15,6 +15,10 @@ project follows [Semantic Versioning](https://semver.org/).
 - Inline links, emphasis, and code spans in Markdown content.
 - Configuration key validation with helpful misspelling errors.
 
+### Fixed
+
+- Escape page metadata inserted into HTML layouts.
+
 ## [1.0.0] - 2024-03-23
 
 ### Added
