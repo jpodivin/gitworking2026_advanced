@@ -18,6 +18,7 @@ project follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Escape page metadata inserted into HTML layouts.
+- Reject duplicate output slugs instead of silently overwriting pages.
 
 ## [1.0.0] - 2024-03-23
 

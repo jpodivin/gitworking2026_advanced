@@ -7,6 +7,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from fernpress.config import load_config
+from fernpress.errors import BuildError
 from fernpress.renderer import build_site, copy_static, load_pages
 
 
@@ -66,6 +67,13 @@ class RendererTests(unittest.TestCase):
         pages = load_pages(self.config)
 
         self.assertEqual([page.title for page in pages], ["New", "Old", "Undated"])
+
+    def test_duplicate_slugs_are_rejected(self) -> None:
+        self.write_page("first.md", "---\ntitle: Same\n---\n")
+        self.write_page("second.md", "---\ntitle: Same\n---\n")
+
+        with self.assertRaisesRegex(BuildError, "Duplicate output slug"):
+            load_pages(self.config)
 
     def test_invalid_date_is_reported(self) -> None:
         self.write_page("bad.md", "---\ntitle: Bad\ndate: yesterday\n---\n")

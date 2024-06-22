@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from fernpress.config import SiteConfig
+from fernpress.errors import BuildError
 from fernpress.feeds import write_feed
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
@@ -43,6 +44,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
     """Load every Markdown file below the configured content directory."""
 
     pages = []
+    seen_slugs = {}
     for source in sorted(config.content_dir.rglob("*.md")):
         document = parse_front_matter(
             source.read_text(encoding="utf-8"), source=str(source)
@@ -50,6 +52,12 @@ def load_pages(config: SiteConfig) -> List[Page]:
         title = str(document.metadata.get("title") or source.stem.replace("-", " ").title())
         explicit_slug = document.metadata.get("slug")
         slug = str(explicit_slug) if explicit_slug else slugify(title)
+        slug = slug or "post"
+        if slug in seen_slugs:
+            raise BuildError(
+                f"Duplicate output slug '{slug}' in {seen_slugs[slug]} and {source}"
+            )
+        seen_slugs[slug] = source
         raw_tags = document.metadata.get("tags", [])
         if isinstance(raw_tags, list):
             tags = [str(tag) for tag in raw_tags if str(tag)]
@@ -61,7 +69,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
             Page(
                 source=source,
                 title=title,
-                slug=slug or "post",
+                slug=slug,
                 date=_parse_date(document.metadata.get("date"), source),
                 tags=tags,
                 metadata=document.metadata,
