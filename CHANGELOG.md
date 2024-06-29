@@ -19,6 +19,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Escape page metadata inserted into HTML layouts.
 - Reject duplicate output slugs instead of silently overwriting pages.
+- Keep generated paths inside the output directory, including Windows-style paths.
 
 ## [1.0.0] - 2024-03-23
 

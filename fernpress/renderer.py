@@ -13,6 +13,7 @@ from fernpress.feeds import write_feed
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
 from fernpress.pagination import paginate
+from fernpress.paths import safe_join
 from fernpress.slug import slugify
 from fernpress.tagging import group_by_tag, tag_slug
 from fernpress.templates import render_template
@@ -90,7 +91,9 @@ def copy_static(config: SiteConfig) -> List[Path]:
     for source in sorted(config.static_dir.rglob("*")):
         if not source.is_file():
             continue
-        destination = config.output_dir / source.relative_to(config.static_dir)
+        destination = safe_join(
+            config.output_dir, str(source.relative_to(config.static_dir))
+        )
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
         copied.append(destination)
@@ -122,9 +125,9 @@ def render_index_pages(
         content = f"<ul>{items}</ul>{''.join(navigation)}"
         title = "Home" if number == 1 else f"Home - page {number}"
         if number == 1:
-            destination = config.output_dir / "index.html"
+            destination = safe_join(config.output_dir, "index.html")
         else:
-            destination = config.output_dir / "page" / f"{number}.html"
+            destination = safe_join(config.output_dir, "page", f"{number}.html")
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(
             render_template(template, _page_context(title, content)), encoding="utf-8"
@@ -143,7 +146,9 @@ def render_tag_pages(config: SiteConfig, template: str, pages: List[Page]) -> Li
             for page in tagged_pages
         )
         content = f"<ul>{items}</ul>" if items else "<p>No posts.</p>"
-        destination = config.output_dir / "tags" / f"{tag_slug(tag)}.html"
+        destination = safe_join(
+            config.output_dir, "tags", f"{tag_slug(tag)}.html"
+        )
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(
             render_template(template, _page_context(f"Tagged: {tag}", content)),
@@ -169,7 +174,8 @@ def build_site(config: SiteConfig) -> List[Path]:
         rendered = render_template(
             template, _page_context(page.title, page.body)
         )
-        destination = config.output_dir / f"{page.slug}.html"
+        destination = safe_join(config.output_dir, f"{page.slug}.html")
+        destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(rendered, encoding="utf-8")
         written.append(destination)
     written.extend(render_index_pages(config, template, pages))

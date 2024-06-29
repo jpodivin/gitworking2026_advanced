@@ -126,6 +126,14 @@ class RendererTests(unittest.TestCase):
 
         self.assertTrue((self.root / "public" / "css" / "site.css").is_file())
 
+    def test_slug_path_traversal_is_rejected(self) -> None:
+        self.write_page(
+            "escape.md", "---\ntitle: Escape\nslug: ../../outside\n---\nBody\n"
+        )
+
+        with self.assertRaisesRegex(ValueError, "escapes output"):
+            build_site(self.config)
+
     def test_missing_template_is_reported(self) -> None:
         (self.root / "templates" / "base.html").unlink()
         self.write_page("hello.md", "# Hello\n")
