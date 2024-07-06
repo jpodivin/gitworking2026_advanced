@@ -71,6 +71,11 @@ fernpress`. Once the test suite is present, it can be run with:
 python -m unittest discover -s tests
 ```
 
+## Maintenance
+
+Release and backport policy is documented in
+[docs/maintenance.md](docs/maintenance.md).
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
