@@ -8,6 +8,7 @@ from typing import Optional, Sequence
 
 from fernpress import __version__
 from fernpress.config import ConfigError, load_config
+from fernpress.errors import BuildError
 from fernpress.renderer import build_site
 
 
@@ -45,7 +46,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 config, output_dir=Path(args.output).expanduser().resolve()
             )
         written = build_site(config)
-    except (ConfigError, OSError, RuntimeError, ValueError) as exc:
+    except (BuildError, ConfigError, OSError, ValueError) as exc:
         print(f"fernpress: {exc}", file=sys.stderr)
         return 1
 

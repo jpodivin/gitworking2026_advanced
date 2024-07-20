@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from fernpress.config import SiteConfig
+from fernpress.errors import BuildError
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
 from fernpress.paths import safe_join
@@ -49,7 +50,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
         slug = str(explicit_slug) if explicit_slug else slugify(title)
         slug = slug or "post"
         if slug in seen_slugs:
-            raise ValueError(
+            raise BuildError(
                 f"Duplicate output slug '{slug}' in {seen_slugs[slug]} and {source}"
             )
         seen_slugs[slug] = source
@@ -93,7 +94,9 @@ def build_site(config: SiteConfig) -> List[Path]:
     try:
         template = template_path.read_text(encoding="utf-8")
     except OSError as exc:
-        raise RuntimeError(f"Could not read layout template {template_path}: {exc}") from exc
+        raise BuildError(
+            f"Could not read layout template {template_path}: {exc}"
+        ) from exc
 
     config.output_dir.mkdir(parents=True, exist_ok=True)
     written = []
