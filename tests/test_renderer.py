@@ -86,7 +86,7 @@ class RendererTests(unittest.TestCase):
 
         written = build_site(self.config)
 
-        destination = self.root / "public" / "hello.html"
+        destination = self.root / "public" / "posts" / "hello" / "index.html"
         self.assertIn(destination, written)
         self.assertTrue((self.root / "public" / "index.html").is_file())
         self.assertIn("<h1>Hello</h1>", destination.read_text(encoding="utf-8"))

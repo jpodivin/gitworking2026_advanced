@@ -33,7 +33,7 @@ class BuildTests(unittest.TestCase):
 
             build_site(load_config(root / "site.json"))
 
-            page = root / "public" / "first-post.html"
+            page = root / "public" / "posts" / "first-post" / "index.html"
             self.assertTrue(page.is_file())
             self.assertIn("<h1>Hello</h1>", page.read_text(encoding="utf-8"))
             self.assertTrue((root / "public" / "css" / "site.css").is_file())

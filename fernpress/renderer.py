@@ -17,6 +17,7 @@ from fernpress.paths import safe_join
 from fernpress.slug import slugify
 from fernpress.tagging import group_by_tag, tag_slug
 from fernpress.templates import render_template
+from fernpress.urls import page_url
 
 
 @dataclass(frozen=True)
@@ -113,7 +114,7 @@ def render_index_pages(
     written = []
     for number, chunk in enumerate(chunks, start=1):
         items = "".join(
-            f'<li><a href="/{page.slug}.html">{html.escape(page.title)}</a></li>'
+            f'<li><a href="{page_url(page.slug)}">{html.escape(page.title)}</a></li>'
             for page in chunk
         )
         navigation = []
@@ -142,7 +143,7 @@ def render_tag_pages(config: SiteConfig, template: str, pages: List[Page]) -> Li
     written = []
     for tag, tagged_pages in sorted(group_by_tag(pages).items(), key=lambda item: item[0].lower()):
         items = "".join(
-            f'<li><a href="/{page.slug}.html">{html.escape(page.title)}</a></li>'
+            f'<li><a href="{page_url(page.slug)}">{html.escape(page.title)}</a></li>'
             for page in tagged_pages
         )
         content = f"<ul>{items}</ul>" if items else "<p>No posts.</p>"
@@ -174,7 +175,9 @@ def build_site(config: SiteConfig) -> List[Path]:
         rendered = render_template(
             template, _page_context(page.title, page.body)
         )
-        destination = safe_join(config.output_dir, f"{page.slug}.html")
+        destination = safe_join(
+            config.output_dir, "posts", page.slug, "index.html"
+        )
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(rendered, encoding="utf-8")
         written.append(destination)

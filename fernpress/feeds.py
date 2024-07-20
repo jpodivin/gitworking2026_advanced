@@ -7,6 +7,7 @@ from typing import Any, Iterable
 from xml.etree import ElementTree
 
 from fernpress.config import SiteConfig
+from fernpress.urls import absolute_url, page_url
 
 
 def feed_path(config: SiteConfig) -> Path:
@@ -25,7 +26,7 @@ def write_feed(config: SiteConfig, pages: Iterable[Any]) -> Path:
     for page in pages:
         item = ElementTree.SubElement(channel, "item")
         ElementTree.SubElement(item, "title").text = page.title
-        link = f"{config.base_url}/{page.slug}.html" if config.base_url else f"/{page.slug}.html"
+        link = absolute_url(config.base_url, page_url(page.slug))
         ElementTree.SubElement(item, "link").text = link
         ElementTree.SubElement(item, "guid").text = link
         published = datetime.combine(page.date, time())

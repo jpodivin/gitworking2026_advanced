@@ -38,7 +38,7 @@ class CliTests(unittest.TestCase):
 
             self.assertEqual(result, 0)
             self.assertIn("Built", output.getvalue())
-            self.assertTrue((root / "public" / "hello.html").is_file())
+            self.assertTrue((root / "public" / "posts" / "hello" / "index.html").is_file())
             self.assertTrue((root / "public" / "index.html").is_file())
 
 

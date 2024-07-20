@@ -33,7 +33,7 @@ class FeedTests(unittest.TestCase):
             item = tree.find("./channel/item")
             self.assertIsNotNone(item)
             self.assertEqual(item.findtext("title"), "Hello")
-            self.assertEqual(item.findtext("link"), "https://example.test/hello.html")
+            self.assertEqual(item.findtext("link"), "https://example.test/posts/hello/")
 
 
 if __name__ == "__main__":
