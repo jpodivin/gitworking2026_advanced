@@ -101,7 +101,9 @@ class RendererTests(unittest.TestCase):
 
         tag_page = self.root / "public" / "tags" / "notes.html"
         self.assertTrue(tag_page.is_file())
-        self.assertIn("Tagged: notes", tag_page.read_text(encoding="utf-8"))
+        tag_html = tag_page.read_text(encoding="utf-8")
+        self.assertIn("Tagged: notes", tag_html)
+        self.assertIn('href="/posts/tagged/"', tag_html)
 
     def test_index_pages_are_paginated(self) -> None:
         self.write_page("one.md", "---\ntitle: One\ndate: 2024-01-03\n---\n")
@@ -115,7 +117,9 @@ class RendererTests(unittest.TestCase):
         second = self.root / "public" / "page" / "2.html"
         self.assertTrue(first.is_file())
         self.assertTrue(second.is_file())
-        self.assertIn("Next", first.read_text(encoding="utf-8"))
+        first_html = first.read_text(encoding="utf-8")
+        self.assertIn('href="/posts/one/"', first_html)
+        self.assertIn("Next", first_html)
 
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"

@@ -10,6 +10,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Posts now use directory-style URLs under `/posts/<slug>/`.
 
+### Tests
+
+- Cover index, tag, and feed links under the new URL layout.
+
 ### Added
 
 - Tag metadata on content pages.
