@@ -6,13 +6,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-08-17
+
 ### Changed
 
 - Posts now use directory-style URLs under `/posts/<slug>/`.
-
-### Tests
-
-- Cover index, tag, and feed links under the new URL layout.
 
 ### Added
 
@@ -28,6 +26,10 @@ project follows [Semantic Versioning](https://semver.org/).
 - Escape page metadata inserted into HTML layouts.
 - Reject duplicate output slugs instead of silently overwriting pages.
 - Keep generated paths inside the output directory, including Windows-style paths.
+
+### Tests
+
+- Cover index, tag, and feed links under the new URL layout.
 
 ## [1.0.0] - 2024-03-23
 
