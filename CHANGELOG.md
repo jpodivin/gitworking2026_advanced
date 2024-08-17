@@ -6,6 +6,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-08-17
+
+### Added
+
+- `--output` override for the build command.
+- 1.x maintenance policy.
+
+### Fixed
+
+- Escape page metadata inserted into HTML layouts.
+- Reject duplicate output slugs instead of overwriting pages.
+- Keep generated files inside the output directory, including Windows-style paths.
+
 ## [1.0.0] - 2024-03-23
 
 ### Added
