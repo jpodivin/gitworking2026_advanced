@@ -121,6 +121,18 @@ class RendererTests(unittest.TestCase):
         self.assertIn('href="/posts/one/"', first_html)
         self.assertIn("Next", first_html)
 
+    def test_index_keeps_last_page_at_exact_boundary(self) -> None:
+        for number in range(1, 5):
+            self.write_page(
+                f"post-{number}.md",
+                f"---\ntitle: Post {number}\ndate: 2024-01-0{number}\n---\n",
+            )
+        config = replace(self.config, posts_per_page=2)
+
+        build_site(config)
+
+        self.assertTrue((self.root / "public" / "page" / "2.html").is_file())
+
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"
         static_file.parent.mkdir()
