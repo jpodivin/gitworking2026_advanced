@@ -3,6 +3,7 @@
 import json
 import tempfile
 import unittest
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from xml.etree import ElementTree
 
@@ -34,7 +35,11 @@ class FeedTests(unittest.TestCase):
             self.assertIsNotNone(item)
             self.assertEqual(item.findtext("title"), "Hello")
             self.assertEqual(item.findtext("link"), "https://example.test/posts/hello/")
-            self.assertTrue(item.findtext("pubDate").endswith("GMT"))
+            pub_date = item.findtext("pubDate")
+            self.assertTrue(pub_date.endswith("GMT"))
+            self.assertEqual(
+                parsedate_to_datetime(pub_date).utcoffset().total_seconds(), 0
+            )
 
 
 if __name__ == "__main__":
