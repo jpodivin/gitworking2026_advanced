@@ -34,6 +34,7 @@ class FeedTests(unittest.TestCase):
             self.assertIsNotNone(item)
             self.assertEqual(item.findtext("title"), "Hello")
             self.assertEqual(item.findtext("link"), "https://example.test/posts/hello/")
+            self.assertTrue(item.findtext("pubDate").endswith("GMT"))
 
 
 if __name__ == "__main__":
