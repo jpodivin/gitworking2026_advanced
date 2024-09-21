@@ -1,6 +1,6 @@
 """RSS feed generation."""
 
-from datetime import datetime, time
+from datetime import datetime, time, timezone
 from email.utils import format_datetime
 from pathlib import Path
 from typing import Any, Iterable
@@ -29,8 +29,10 @@ def write_feed(config: SiteConfig, pages: Iterable[Any]) -> Path:
         link = absolute_url(config.base_url, page_url(page.slug))
         ElementTree.SubElement(item, "link").text = link
         ElementTree.SubElement(item, "guid").text = link
-        published = datetime.combine(page.date, time())
-        ElementTree.SubElement(item, "pubDate").text = format_datetime(published)
+        published = datetime.combine(page.date, time(), tzinfo=timezone.utc)
+        ElementTree.SubElement(item, "pubDate").text = format_datetime(
+            published, usegmt=True
+        )
 
     destination = feed_path(config)
     destination.parent.mkdir(parents=True, exist_ok=True)
