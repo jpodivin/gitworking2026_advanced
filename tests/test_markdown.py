@@ -37,6 +37,14 @@ class MarkdownTests(unittest.TestCase):
         rendered = render_markdown("Run `fernpress build`.\n")
         self.assertIn("<code>fernpress build</code>", rendered)
 
+    def test_underscores_in_link_targets_are_preserved(self) -> None:
+        rendered = render_markdown(
+            "Read [the docs](https://example.test/a_b_c) carefully.\n"
+        )
+
+        self.assertIn('href="https://example.test/a_b_c"', rendered)
+        self.assertNotIn("<em>b</em>", rendered)
+
     def test_empty_input_produces_empty_output(self) -> None:
         self.assertEqual(render_markdown(""), "")
 

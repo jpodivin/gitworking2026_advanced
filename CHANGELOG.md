@@ -10,6 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Keep the final pagination page when the post count is an exact multiple.
 - Emit RSS publication dates in UTC with an explicit GMT suffix.
+- Preserve underscores in Markdown link targets.
 
 ## [2.0.0] - 2024-08-17
 

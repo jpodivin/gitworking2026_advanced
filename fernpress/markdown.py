@@ -8,12 +8,29 @@ _FENCE = re.compile(r"^```([A-Za-z0-9_+-]*)\s*$")
 
 
 def _inline(text: str) -> str:
-    value = html.escape(text, quote=False)
+    placeholders = {}
+
+    def stash(fragment: str) -> str:
+        token = f"\x00{len(placeholders)}\x00"
+        placeholders[token] = fragment
+        return token
+
+    def code(match: re.Match) -> str:
+        return stash(f"<code>{html.escape(match.group(1), quote=False)}</code>")
+
+    def link(match: re.Match) -> str:
+        label = html.escape(match.group(1), quote=False)
+        target = html.escape(match.group(2), quote=True)
+        return stash(f'<a href="{target}">{label}</a>')
+
+    value = re.sub(r"`([^`]+)`", code, text)
+    value = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, value)
+    value = html.escape(value, quote=False)
     value = re.sub(r"_([^_]+)_", r"<em>\1</em>", value)
     value = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", value)
     value = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", value)
-    value = re.sub(r"`([^`]+)`", r"<code>\1</code>", value)
-    value = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', value)
+    for token, fragment in placeholders.items():
+        value = value.replace(token, fragment)
     return value
 
 
