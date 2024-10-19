@@ -67,6 +67,12 @@ class ConfigTests(unittest.TestCase):
         with self.assertRaisesRegex(ConfigError, "JSON object"):
             load_config(self.write_config([]))
 
+    def test_publishing_flags_default_to_false(self) -> None:
+        config = load_config(self.write_config({}))
+
+        self.assertFalse(config.include_drafts)
+        self.assertFalse(config.include_future)
+
     def test_unknown_keys_are_rejected(self) -> None:
         with self.assertRaisesRegex(ConfigError, "Unknown configuration key"):
             load_config(self.write_config({"titel": "Typo"}))

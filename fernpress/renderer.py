@@ -52,6 +52,12 @@ def load_pages(config: SiteConfig) -> List[Page]:
             source.read_text(encoding="utf-8"), source=str(source)
         )
         title = str(document.metadata.get("title") or source.stem.replace("-", " ").title())
+        page_date = _parse_date(document.metadata.get("date"), source)
+        if page_date > Date.today() and not config.include_future:
+            continue
+        draft = document.metadata.get("draft", False)
+        if draft == "true" and not config.include_drafts:
+            continue
         explicit_slug = document.metadata.get("slug")
         slug = str(explicit_slug) if explicit_slug else slugify(title)
         slug = slug or "post"
@@ -72,7 +78,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
                 source=source,
                 title=title,
                 slug=slug,
-                date=_parse_date(document.metadata.get("date"), source),
+                date=page_date,
                 tags=tags,
                 metadata=document.metadata,
                 body=render_markdown(document.body),

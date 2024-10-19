@@ -13,6 +13,8 @@ DEFAULTS: Dict[str, Any] = {
     "template_dir": "templates",
     "static_dir": "static",
     "posts_per_page": 10,
+    "include_drafts": False,
+    "include_future": False,
 }
 
 PATH_FIELDS = ("content_dir", "output_dir", "template_dir", "static_dir")
@@ -34,6 +36,8 @@ class SiteConfig:
     template_dir: Path
     static_dir: Path
     posts_per_page: int
+    include_drafts: bool = False
+    include_future: bool = False
 
 
 def _read_json(path: Path) -> Mapping[str, Any]:
@@ -57,6 +61,13 @@ def _string_setting(values: Mapping[str, Any], name: str) -> str:
     value = values[name]
     if not isinstance(value, str):
         raise ConfigError(f"Configuration value '{name}' must be a string")
+    return value
+
+
+def _bool_setting(values: Mapping[str, Any], name: str) -> bool:
+    value = values[name]
+    if not isinstance(value, bool):
+        raise ConfigError(f"Configuration value '{name}' must be a boolean")
     return value
 
 
@@ -91,5 +102,7 @@ def load_config(path: Union[str, Path]) -> SiteConfig:
         title=_string_setting(values, "title"),
         base_url=_string_setting(values, "base_url").rstrip("/"),
         posts_per_page=_positive_int_setting(values, "posts_per_page"),
+        include_drafts=_bool_setting(values, "include_drafts"),
+        include_future=_bool_setting(values, "include_future"),
         **paths,
     )

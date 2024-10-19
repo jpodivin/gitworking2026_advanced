@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Draft and future-dated post filtering for production builds.
+
 ### Fixed
 
 - Keep the final pagination page when the post count is an exact multiple.
