@@ -9,6 +9,7 @@ from typing import Dict, List
 
 from fernpress.config import SiteConfig
 from fernpress.errors import BuildError
+from fernpress.excerpt import make_excerpt
 from fernpress.feeds import write_feed
 from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
@@ -31,6 +32,7 @@ class Page:
     tags: List[str]
     metadata: Dict[str, object]
     body: str
+    excerpt: str
 
 
 def _parse_date(value: object, source: Path) -> Date:
@@ -76,6 +78,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
                 tags=tags,
                 metadata=document.metadata,
                 body=render_markdown(document.body),
+                excerpt=make_excerpt(document.body),
             )
         )
     pages.sort(key=lambda page: (page.date, page.source.name), reverse=True)
@@ -101,8 +104,13 @@ def copy_static(config: SiteConfig) -> List[Path]:
     return copied
 
 
-def _page_context(title: str, content: str) -> Dict[str, str]:
-    return {"title": title, "content": content, "year": "2024"}
+def _page_context(title: str, content: str, excerpt: str = "") -> Dict[str, str]:
+    return {
+        "title": title,
+        "content": content,
+        "excerpt": excerpt,
+        "year": "2024",
+    }
 
 
 def render_index_pages(
@@ -173,7 +181,7 @@ def build_site(config: SiteConfig) -> List[Path]:
     written = []
     for page in pages:
         rendered = render_template(
-            template, _page_context(page.title, page.body)
+            template, _page_context(page.title, page.body, page.excerpt)
         )
         destination = safe_join(
             config.output_dir, "posts", page.slug, "index.html"
