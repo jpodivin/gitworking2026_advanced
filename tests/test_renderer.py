@@ -133,6 +133,20 @@ class RendererTests(unittest.TestCase):
 
         self.assertTrue((self.root / "public" / "page" / "2.html").is_file())
 
+    def test_excerpt_is_available_to_templates(self) -> None:
+        (self.root / "templates" / "base.html").write_text(
+            "<p>{{ excerpt }}</p>{{ content }}", encoding="utf-8"
+        )
+        self.write_page(
+            "summary.md",
+            "---\ntitle: Summary\n---\nA short summary paragraph.\n",
+        )
+
+        build_site(self.config)
+
+        output = self.root / "public" / "posts" / "summary" / "index.html"
+        self.assertIn("<p>A short summary paragraph.</p>", output.read_text(encoding="utf-8"))
+
     def test_static_files_are_copied(self) -> None:
         static_file = self.root / "static" / "css" / "site.css"
         static_file.parent.mkdir()

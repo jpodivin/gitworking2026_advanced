@@ -12,6 +12,11 @@ project follows [Semantic Versioning](https://semver.org/).
 - Emit RSS publication dates in UTC with an explicit GMT suffix.
 - Preserve underscores in Markdown link targets.
 
+### Added
+
+- Plain-text excerpt generation for post templates.
+- `excerpt` template value for page layouts.
+
 ## [2.0.0] - 2024-08-17
 
 ### Changed
