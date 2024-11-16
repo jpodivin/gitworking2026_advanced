@@ -16,6 +16,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Plain-text excerpt generation for post templates.
 - `excerpt` template value for page layouts.
+- Excerpt usage and 2.x maintenance documentation.
 
 ## [2.0.0] - 2024-08-17
 

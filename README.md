@@ -64,6 +64,11 @@ example/     Small buildable example site
 docs/        Maintenance and contributor documentation
 ```
 
+## Excerpts
+
+Layouts can use the generated plain-text `excerpt` value. See
+[docs/excerpts.md](docs/excerpts.md) for an example.
+
 ## Development
 
 No installation step is required. Run the module directly with `python -m
@@ -72,6 +77,11 @@ fernpress`. Once the test suite is present, it can be run with:
 ```sh
 python -m unittest discover -s tests
 ```
+
+## Maintenance
+
+Release and backport policy is documented in
+[docs/maintenance.md](docs/maintenance.md).
 
 ## License
 
