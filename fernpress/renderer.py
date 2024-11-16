@@ -14,6 +14,7 @@ from fernpress.frontmatter import parse_front_matter
 from fernpress.markdown import render_markdown
 from fernpress.pagination import paginate
 from fernpress.paths import safe_join
+from fernpress.sitemap import SITEMAP_NS, write_sitemap
 from fernpress.slug import slugify
 from fernpress.tagging import group_by_tag, tag_slug
 from fernpress.templates import render_template
@@ -190,5 +191,12 @@ def build_site(config: SiteConfig) -> List[Path]:
     written.extend(render_index_pages(config, template, pages))
     written.extend(render_tag_pages(config, template, pages))
     written.append(write_feed(config, pages))
+    chunks = paginate(pages, config.posts_per_page)
+    sitemap_paths = ["/"] + [page_url(page.slug) for page in pages]
+    sitemap_paths.extend(
+        f"/tags/{tag_slug(tag)}.html" for tag in group_by_tag(pages)
+    )
+    sitemap_paths.extend(f"/page/{number}.html" for number in range(2, len(chunks)))
+    written.append(write_sitemap(config, sitemap_paths))
     written.extend(copy_static(config))
     return written
