@@ -7,6 +7,7 @@ from datetime import date as Date
 from pathlib import Path
 from typing import Dict, List
 
+from fernpress.cache import BuildCache
 from fernpress.config import SiteConfig
 from fernpress.errors import BuildError
 from fernpress.feeds import write_feed
@@ -176,17 +177,20 @@ def build_site(config: SiteConfig) -> List[Path]:
         raise RuntimeError(f"Could not read layout template {template_path}: {exc}") from exc
 
     config.output_dir.mkdir(parents=True, exist_ok=True)
+    cache = BuildCache(config.output_dir / ".fern-cache.json")
     pages = load_pages(config)
     written = []
     for page in pages:
-        rendered = render_template(
-            template, _page_context(page.title, page.body)
-        )
         destination = safe_join(
             config.output_dir, "posts", page.slug, "index.html"
         )
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(rendered, encoding="utf-8")
+        if not destination.exists() or not cache.is_fresh(page.source):
+            rendered = render_template(
+                template, _page_context(page.title, page.body)
+            )
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(rendered, encoding="utf-8")
+        cache.record(page.source)
         written.append(destination)
     written.extend(render_index_pages(config, template, pages))
     written.extend(render_tag_pages(config, template, pages))
@@ -198,5 +202,6 @@ def build_site(config: SiteConfig) -> List[Path]:
     )
     sitemap_paths.extend(f"/page/{number}.html" for number in range(2, len(chunks)))
     written.append(write_sitemap(config, sitemap_paths))
+    cache.save()
     written.extend(copy_static(config))
     return written

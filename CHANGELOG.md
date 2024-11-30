@@ -10,6 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Draft and future-dated post filtering for production builds.
 - Sitemap generation for pages, posts, tags, and paginated indexes.
+- Incremental build cache for unchanged content sources.
 
 ### Fixed
 
