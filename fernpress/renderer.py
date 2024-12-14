@@ -16,7 +16,7 @@ from fernpress.markdown import render_markdown
 from fernpress.pagination import paginate
 from fernpress.paths import safe_join
 from fernpress.slug import slugify
-from fernpress.tagging import group_by_tag, tag_slug
+from fernpress.tagging import sorted_tag_groups, tag_slug
 from fernpress.templates import render_template
 from fernpress.urls import page_url
 
@@ -149,7 +149,7 @@ def render_tag_pages(config: SiteConfig, template: str, pages: List[Page]) -> Li
     """Render one index page for each tag."""
 
     written = []
-    for tag, tagged_pages in sorted(group_by_tag(pages).items(), key=lambda item: item[0].lower()):
+    for tag, tagged_pages in sorted_tag_groups(pages):
         items = "".join(
             f'<li><a href="{page_url(page.slug)}">{html.escape(page.title)}</a></li>'
             for page in tagged_pages
