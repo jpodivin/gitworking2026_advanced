@@ -6,6 +6,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-01-11
+
 ### Fixed
 
 - Keep the final pagination page when the post count is an exact multiple.
