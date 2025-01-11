@@ -49,7 +49,9 @@ Relative paths are resolved from the directory containing that file.
   "output_dir": "public",
   "template_dir": "templates",
   "static_dir": "static",
-  "posts_per_page": 10
+  "posts_per_page": 10,
+  "include_drafts": false,
+  "include_future": false
 }
 ```
 
@@ -72,6 +74,11 @@ fernpress`. Once the test suite is present, it can be run with:
 ```sh
 python -m unittest discover -s tests
 ```
+
+## Deployment and maintenance
+
+Deployment guidance is in [docs/deployment.md](docs/deployment.md). Release
+and backport policy is documented in [docs/maintenance.md](docs/maintenance.md).
 
 ## License
 

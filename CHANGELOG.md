@@ -12,6 +12,7 @@ project follows [Semantic Versioning](https://semver.org/).
 - Sitemap generation for pages, posts, tags, and paginated indexes.
 - Incremental build cache for unchanged content sources.
 - Local preview server for generated sites.
+- Deployment guide and build-cache documentation.
 
 ### Fixed
 
