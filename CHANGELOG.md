@@ -6,6 +6,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.0] - 2025-02-08
+
 ### Added
 
 - Draft and future-dated post filtering for production builds.
