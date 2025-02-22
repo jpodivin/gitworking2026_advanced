@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Exclude front matter drafts from production output and feeds.
+
 ## [3.0.0] - 2025-02-08
 
 ### Added
