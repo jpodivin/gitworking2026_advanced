@@ -9,6 +9,7 @@ project follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Exclude front matter drafts from production output and feeds.
+- Include the final paginated page in the sitemap.
 
 ## [3.0.0] - 2025-02-08
 
