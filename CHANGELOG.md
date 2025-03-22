@@ -10,6 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Exclude front matter drafts from production output and feeds.
 - Include the final paginated page in the sitemap.
+- Invalidate the build cache when a source changes within the same second.
 
 ## [3.0.0] - 2025-02-08
 
