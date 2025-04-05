@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- JSON content index for search and client-side tooling.
+
 ### Fixed
 
 - Exclude front matter drafts from production output and feeds.
