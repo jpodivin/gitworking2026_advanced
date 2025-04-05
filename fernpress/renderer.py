@@ -59,7 +59,7 @@ def load_pages(config: SiteConfig) -> List[Page]:
         if page_date > Date.today() and not config.include_future:
             continue
         draft = document.metadata.get("draft", False)
-        if draft == "true" and not config.include_drafts:
+        if draft and not config.include_drafts:
             continue
         explicit_slug = document.metadata.get("slug")
         slug = str(explicit_slug) if explicit_slug else slugify(title)
