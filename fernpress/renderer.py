@@ -201,7 +201,7 @@ def build_site(config: SiteConfig) -> List[Path]:
     sitemap_paths.extend(
         f"/tags/{tag_slug(tag)}.html" for tag in group_by_tag(pages)
     )
-    sitemap_paths.extend(f"/page/{number}.html" for number in range(2, len(chunks)))
+    sitemap_paths.extend(f"/page/{number}.html" for number in range(2, len(chunks) + 1))
     written.append(write_sitemap(config, sitemap_paths))
     written.append(write_json_index(config, pages))
     cache.save()
