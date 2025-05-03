@@ -75,6 +75,11 @@ fernpress`. Once the test suite is present, it can be run with:
 python -m unittest discover -s tests
 ```
 
+## JSON index
+
+Every build writes a machine-readable `index.json`. Its schema is documented
+in [docs/json-index.md](docs/json-index.md).
+
 ## Deployment and maintenance
 
 Deployment guidance is in [docs/deployment.md](docs/deployment.md). Release
