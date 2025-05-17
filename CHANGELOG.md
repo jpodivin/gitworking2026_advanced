@@ -10,6 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - JSON content index for search and client-side tooling.
 - JSON index schema documentation.
+- 3.x support-window documentation.
 
 ### Fixed
 
