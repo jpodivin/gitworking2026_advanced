@@ -6,6 +6,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.1.0] - 2025-06-28
+
 ### Added
 
 - JSON content index for search and client-side tooling.
