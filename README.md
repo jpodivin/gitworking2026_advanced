@@ -69,11 +69,14 @@ docs/        Maintenance and contributor documentation
 ## Development
 
 No installation step is required. Run the module directly with `python -m
-fernpress`. Once the test suite is present, it can be run with:
+fernpress`. The test suite can be run with:
 
 ```sh
 python -m unittest discover -s tests
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidance and
+[docs/roadmap.md](docs/roadmap.md) for planned work.
 
 ## Deployment and maintenance
 
